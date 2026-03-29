@@ -1,0 +1,20 @@
+services:
+  nest-api:
+    build: .
+    container_name: nest_api
+    restart: unless-stopped
+
+    labels:
+    - "traefik.enable=true"
+    - "traefik.docker.network=network_swarm_public"
+    - "traefik.http.routers.nest.rule=Host(`api.seudominio.com`)"
+    - "traefik.http.routers.nest.entrypoints=websecure"
+    - "traefik.http.routers.nest.tls.certresolver=letsencrypt"
+    - "traefik.http.services.nest.loadbalancer.server.port=3000"
+
+    networks:
+      - network_swarm_public
+
+networks:
+  network_swarm_public:
+    external: true
