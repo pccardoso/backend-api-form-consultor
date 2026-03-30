@@ -13,7 +13,7 @@ export class FormService {
 
         const instancSupabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('form_consultor').select();
+        const {data, error} = await instancSupabase.from('tickets').select();
 
         if(error) {
             console.error('Error fetching forms:', error);
@@ -28,7 +28,7 @@ export class FormService {
 
         const instancSupabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('form_consultor').insert([formData]).select();
+        const {data, error} = await instancSupabase.from('tickets').insert([formData]).select();
 
         if(error) {
             console.error('Error creating form:', error);
@@ -43,7 +43,7 @@ export class FormService {
 
         const instancSupabase = this.supabaseService.getSupabaseService();  
 
-        const {data, error} = await instancSupabase.from('form_consultor').select().eq('id', id).single();
+        const {data, error} = await instancSupabase.from('tickets').select().eq('id', id).single();
 
         if(error) {
             console.error('Error fetching form by id:', error);
