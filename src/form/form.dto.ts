@@ -46,4 +46,10 @@ export class CreateFormDto {
 
     @IsString()
     department: string;
+
+    @IsString()
+    pes_evogard_edu: string;
+
+    @IsString()
+    pes_cliente_resolveu: string;
 }
