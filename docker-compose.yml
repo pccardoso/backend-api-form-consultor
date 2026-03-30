@@ -4,6 +4,11 @@ services:
   nest-api:
     image: nest_api
     build: .
+
+    environment:
+      SUPABASE_URL: "https://xqsvvjdxzbgpjoyyxzbn.supabase.co"
+      SUPABASE_KEY: "sb_publishable_sDbbRSb8raWkuh1kNIRR-Q_Njv_kcIq"
+
     networks:
       - network_swarm_public
 
