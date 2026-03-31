@@ -17,6 +17,7 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network=network_swarm_public"
         - "traefik.http.routers.nest.rule=Host(`autoanalytics.mundoevogard.com`) && PathPrefix(`/api`)"
+        - "traefik.http.routers.nest.priority=10"
         - "traefik.http.routers.nest.entrypoints=websecure"
         - "traefik.http.routers.nest.tls.certresolver=letsencryptresolver"
         - "traefik.http.services.nest.loadbalancer.server.port=3000"
