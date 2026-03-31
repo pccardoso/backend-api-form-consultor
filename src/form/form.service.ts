@@ -54,4 +54,19 @@ export class FormService {
 
     }
 
+    async deleteForm(id: number) {
+
+        const instancSupabase = this.supabaseService.getSupabaseService();
+
+        const {data, error} = await instancSupabase.from('tickets').delete().eq('id', id);
+
+        if(error) {
+            console.error('Error deleting form:', error);
+            throw new Error('Failed to delete form');
+        }
+
+        return data;
+
+    }
+
 }
