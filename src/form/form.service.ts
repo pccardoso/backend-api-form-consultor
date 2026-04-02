@@ -9,19 +9,26 @@ export class FormService {
         private supabaseService: SupabaseService
     ) {}
 
-    async getAll(): Promise<any[]>{
+    async getAll(department?: string): Promise<any[]> {
 
-        const instancSupabase = this.supabaseService.getSupabaseService();
+        const supabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('tickets').select();
+        let query = supabase
+            .from('tickets')
+            .select();
 
-        if(error) {
+        if (department) {
+            query = query.eq('department', department);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
             console.error('Error fetching forms:', error);
             throw new Error('Failed to fetch forms');
         }
 
         return data;
-
     }
 
     async createForm(formData: CreateFormDto) {
@@ -65,6 +72,21 @@ export class FormService {
             throw new Error('Failed to delete form');
         }
 
+        return data;
+
+    }
+
+    async updateForm(id: number, formData: CreateFormDto) {
+
+        const instancSupabase = this.supabaseService.getSupabaseService();
+
+        const {data, error} = await instancSupabase.from('tickets').update(formData).eq('id', id).select();
+
+        if(error) {
+            console.error('Error updating form:', error);
+            throw new Error('Failed to update form');
+        }
+        
         return data;
 
     }
