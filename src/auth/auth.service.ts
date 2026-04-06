@@ -28,16 +28,19 @@ export class AuthService {
     const payload = {
       id: user.id,
       email: user.email,
-      department: user.department
+      department: user.department,
+      name: user.name,
+      admin: user.admin
     };
 
     return {
       access_token: this.jwtService.sign(payload),
+      user: payload
     };
 
   }
 
-  async register(name: string, email: string, password: string, department: string) {
+  async register(name: string, email: string, password: string, department: string, admin: boolean) {
 
     const existingUser = await this.usersService.findByEmail(email);
 
@@ -51,17 +54,21 @@ export class AuthService {
       name,
       email,
       password: hashedPassword,
-      department
+      department,
+      admin
     });
 
     const payload = {
       id: newUser.id,
       email: newUser.email,
-      department: newUser.department
+      department: newUser.department,
+      admin: newUser.admin,
+      name: newUser.name
     };
 
     return {
       access_token: this.jwtService.sign(payload),
+      user: payload
     };
 
   }

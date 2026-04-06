@@ -4,13 +4,13 @@ import { CreateFormDto } from './form.dto';
 import { ApiOperation, ApiParam } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+
 @Controller('form')
 export class FormController {
   constructor(private readonly formService: FormService) {}
 
-  
   @ApiOperation({ summary: 'Listar formulários', description: 'Retorna uma lista de todos os formulários' })
+  @UseGuards(AuthGuard('jwt'))
   @Get('')
   async getAll(@Req() req: any) {
 
@@ -27,6 +27,7 @@ export class FormController {
 
   @ApiOperation({ summary: 'Obter formulário por ID', description: 'Retorna um formulário específico com base no ID' }) 
   @ApiParam({ name: 'id', description: 'ID do formulário', type: Number })
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async getFormById(@Param('id') id: number) {
     return await this.formService.getFormById(id);
@@ -34,6 +35,7 @@ export class FormController {
 
   @ApiOperation({ summary: 'Deletar formulário', description: 'Deleta um formulário específico com base no ID' })
   @ApiParam({ name: 'id', description: 'ID do formulário', type: Number })
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async deleteForm(@Param('id') id: number) {
     return await this.formService.deleteForm(id);
@@ -41,6 +43,7 @@ export class FormController {
 
   @ApiOperation({ summary: 'Atualizar formulário', description: 'Atualiza um formulário específico com base no ID' })
   @ApiParam({ name: 'id', description: 'ID do formulário', type: Number })
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   async updateForm(@Param('id') id: number, @Body() formData: CreateFormDto) {
     return await this.formService.updateForm(id, formData);
