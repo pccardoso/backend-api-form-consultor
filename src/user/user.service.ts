@@ -29,7 +29,7 @@ export class UsersService {
       .from('users')
       .select('*')
       .eq('email', email)
-      .eq('status', true)
+      .eq('active', true)
       .single();
 
     if (error) {
@@ -77,7 +77,7 @@ export class UsersService {
 
     const { error } = await supabase
       .from('users')
-      .update({ status: false })
+      .update({ active: false })
       .eq('id', id);
 
     if (error) {
