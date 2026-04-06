@@ -7,7 +7,7 @@ export class FormService {
 
     constructor(
         private supabaseService: SupabaseService
-    ) {}
+    ) { }
 
     async getAll(department?: string): Promise<any[]> {
 
@@ -15,7 +15,8 @@ export class FormService {
 
         let query = supabase
             .from('tickets')
-            .select();
+            .select()
+            .eq('status', true);
 
         if (department) {
             query = query.eq('department', department);
@@ -35,9 +36,9 @@ export class FormService {
 
         const instancSupabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('tickets').insert([formData]).select();
+        const { data, error } = await instancSupabase.from('tickets').insert([formData]).select();
 
-        if(error) {
+        if (error) {
             console.error('Error creating form:', error);
             throw new Error('Failed to create form');
         }
@@ -48,11 +49,16 @@ export class FormService {
 
     async getFormById(id: number) {
 
-        const instancSupabase = this.supabaseService.getSupabaseService();  
+        const instancSupabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('tickets').select().eq('id', id).single();
+        const { data, error } = await instancSupabase
+            .from('tickets')
+            .select()
+            .eq('id', id)
+            .eq('status', true)
+            .single();
 
-        if(error) {
+        if (error) {
             console.error('Error fetching form by id:', error);
             throw new Error('Failed to fetch form by id');
         }
@@ -65,28 +71,31 @@ export class FormService {
 
         const instancSupabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('tickets').delete().eq('id', id);
+        const { data, error } = await instancSupabase
+            .from('tickets')
+            .update({ status: false })
+            .eq('id', id)
+            .select();
 
-        if(error) {
+        if (error) {
             console.error('Error deleting form:', error);
             throw new Error('Failed to delete form');
         }
 
         return data;
-
     }
 
     async updateForm(id: number, formData: CreateFormDto) {
 
         const instancSupabase = this.supabaseService.getSupabaseService();
 
-        const {data, error} = await instancSupabase.from('tickets').update(formData).eq('id', id).select();
+        const { data, error } = await instancSupabase.from('tickets').update(formData).eq('id', id).select();
 
-        if(error) {
+        if (error) {
             console.error('Error updating form:', error);
             throw new Error('Failed to update form');
         }
-        
+
         return data;
 
     }
