@@ -62,6 +62,10 @@ export class CreateFormDto {
     @IsString()
     department: string;
 
+    @ApiProperty({ description: 'Tipo de consulta: associado, terceiro, associado e terceiro' })
+    @IsString()
+    type_request: string;
+
     @ApiProperty({ description: 'Pesquisa Evogard Edu' })
     @IsString()
     pes_evogard_edu: string;
