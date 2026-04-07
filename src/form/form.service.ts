@@ -14,9 +14,12 @@ export class FormService {
         const supabase = this.supabaseService.getSupabaseService();
 
         let query = supabase
-            .from('tickets')
-            .select()
-            .eq('status', true);
+        .from('tickets')
+        .select(`
+            *,
+            avaliacoes(*)
+        `)
+        .eq('status', true);
 
         if (department) {
             query = query.eq('department', department);
@@ -53,7 +56,9 @@ export class FormService {
 
         const { data, error } = await instancSupabase
             .from('tickets')
-            .select()
+            .select(
+                '*, avaliacoes(*)'
+            )
             .eq('id', id)
             .eq('status', true)
             .single();

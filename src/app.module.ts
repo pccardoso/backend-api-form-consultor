@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { FormModule } from './form/form.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
+import { SatisfactionModule } from './satisfaction/satisfaction.module';
 
 
 @Module({
@@ -14,7 +15,8 @@ import { UsersModule } from './user/user.module';
     }),
     FormModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    SatisfactionModule
   ],
   controllers: [AppController],
   providers: [AppService],
