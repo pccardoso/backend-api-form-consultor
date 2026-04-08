@@ -11,7 +11,7 @@ export class SatisfactionController {
     return this.satisfactionService.validateSatisfactionData(codForm);
   }
 
-  @Post(':codForm')
+  @Post()
   async createSatisfactionData(
     @Body() satisfactionData: SatisfactionDto,
   ) {
