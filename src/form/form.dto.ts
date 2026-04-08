@@ -73,4 +73,12 @@ export class CreateFormDto {
     @ApiProperty({ description: 'Pesquisa Cliente Resolveu' })
     @IsString()
     pes_cliente_resolveu: string;
+
+    @ApiProperty({ description: 'Código do consultor no SGA' })
+    @IsNumber()
+    codigo_consultor: number;
+
+    @ApiProperty({ description: 'Código da cooperativa no SGA' })   
+    @IsNumber()
+    codigo_cooperativa: number; 
 }
