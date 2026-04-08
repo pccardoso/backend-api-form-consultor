@@ -12,7 +12,7 @@ export class EmailService {
     const nome = dataInfor.nome;
     const consultor = dataInfor.consultor;
     const placa = dataInfor.placa;
-    const linkAvaliacao = `https://autoanalytics.mundoevogard.com/satisfaction/validate/${codigo}`;
+    const linkAvaliacao = `https://autoanalytics.mundoevogard.com/satisfaction/${codigo}`;
 
     await this.mailerService.sendMail({
       to: send,

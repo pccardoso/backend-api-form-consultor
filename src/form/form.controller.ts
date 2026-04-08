@@ -26,7 +26,6 @@ export class FormController {
 
   @ApiOperation({ summary: 'Obter formulário por ID', description: 'Retorna um formulário específico com base no ID' }) 
   @ApiParam({ name: 'id', description: 'ID do formulário', type: Number })
-  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async getFormById(@Param('id') id: number) {
     return await this.formService.getFormById(id);
