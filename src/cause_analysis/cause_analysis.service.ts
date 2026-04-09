@@ -9,7 +9,7 @@ export class CauseAnalysisService {
         private readonly supabaseService: SupabaseService
     ) {}
 
-    async createCauseAnalysis(dataDto: CauseAnalysisDto) {
+    async createCauseAnalysis(dataDto: any) {
 
         const supabase = this.supabaseService.getSupabaseService();
 

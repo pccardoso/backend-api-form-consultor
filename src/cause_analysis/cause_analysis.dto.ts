@@ -9,8 +9,6 @@ import {
 } from 'class-validator';
 
 export class CauseAnalysisDto {
-  @IsUUID()
-  user_id: string;
 
   @IsNumber()
   ticket_id: number;
