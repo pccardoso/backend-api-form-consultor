@@ -20,4 +20,8 @@ export class CauseDto {
     @IsOptional()
     descricao?: string;
 
+    @ApiProperty({ description: 'Nível de risco da causa: 0 Baixo, 1 Médio, 2 Alto' })
+    @IsNumber()
+    risco: number;
+
 }
