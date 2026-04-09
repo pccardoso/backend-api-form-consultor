@@ -6,116 +6,134 @@ import { EmailService } from 'src/email/email.service';
 @Injectable()
 export class FormService {
 
-    constructor(
-        private supabaseService: SupabaseService,
-        private emailService: EmailService
-    ) { }
+  constructor(
+    private supabaseService: SupabaseService,
+    private emailService: EmailService
+  ) { }
 
-    async getAll(department?: string): Promise<any[]> {
+  async getAll(department?: string): Promise<any[]> {
 
-        const supabase = this.supabaseService.getSupabaseService();
+    const supabase = this.supabaseService.getSupabaseService();
 
-        let query = supabase
-        .from('tickets')
-        .select(`
-            *,
-            avaliacoes(*)
-        `)
-        .eq('status', true);
+    let query = supabase
+      .from('tickets')
+      .select(`
+    *,
+    avaliacoes(*),
+    analises(
+      *,
+      analise_causas(
+        causa_id,
+        causas(*)
+      )
+    )
+  `)
+      .eq('status', true);
 
-        if (department) {
-            query = query.eq('department', department);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-            console.error('Error fetching forms:', error);
-            throw new Error('Failed to fetch forms');
-        }
-
-        return data;
+    if (department) {
+      query = query.eq('department', department);
     }
 
-    async createForm(formData: CreateFormDto) {
+    const { data, error } = await query;
 
-        const instancSupabase = this.supabaseService.getSupabaseService();
-
-        const { data, error } = await instancSupabase.from('tickets').insert([formData]).select();
-
-        if (error) {
-            console.error('Error creating form:', error);
-            throw new Error('Failed to create form');
-        }
-
-        await this.emailService.sendEmail(
-            formData.email_voluntario_sga,
-            'Formulário Recebido',
-            {
-                codigo: data[0].id,
-                nome: formData.nome_associado_sga,
-                consultor: formData.nome_cooperativa_consultor,
-                placa: formData.plate_associate
-            }
-        );
-
-        return data;
-
+    if (error) {
+      console.error('Error fetching forms:', error);
+      throw new Error('Failed to fetch forms');
     }
 
-    async getFormById(id: number) {
+    return data;
+  }
 
-        const instancSupabase = this.supabaseService.getSupabaseService();
+  async createForm(formData: CreateFormDto) {
 
-        const { data, error } = await instancSupabase
-            .from('tickets')
-            .select(
-                '*, avaliacoes(*)'
-            )
-            .eq('id', id)
-            .eq('status', true)
-            .single();
+    const instancSupabase = this.supabaseService.getSupabaseService();
 
-        if (error) {
-            console.error('Error fetching form by id:', error);
-            throw new Error('Failed to fetch form by id');
-        }
+    const { data, error } = await instancSupabase.from('tickets').insert([formData]).select();
 
-        return data;
-
+    if (error) {
+      console.error('Error creating form:', error);
+      throw new Error('Failed to create form');
     }
 
-    async deleteForm(id: number) {
+    await this.emailService.sendEmail(
+      formData.email_voluntario_sga,
+      'Formulário Recebido',
+      {
+        codigo: data[0].id,
+        nome: formData.nome_associado_sga,
+        consultor: formData.nome_cooperativa_consultor,
+        placa: formData.plate_associate
+      }
+    );
 
-        const instancSupabase = this.supabaseService.getSupabaseService();
+    return data;
 
-        const { data, error } = await instancSupabase
-            .from('tickets')
-            .update({ status: false })
-            .eq('id', id)
-            .select();
+  }
 
-        if (error) {
-            console.error('Error deleting form:', error);
-            throw new Error('Failed to delete form');
-        }
+  async getFormById(id: number) {
 
-        return data;
+    const instancSupabase = this.supabaseService.getSupabaseService();
+
+    const { data, error } = await instancSupabase
+      .from('tickets')
+      .select(`
+    *,
+    avaliacoes(*),
+    analises(
+      *,
+      analise_causas(
+        causa_id,
+        causas(
+          *,
+          causa_categorias(*)
+        )
+      )
+    )
+  `)
+      .eq('id', id)
+      .eq('status', true)
+      .single();
+
+    if (error) {
+      console.error('Error fetching form by id:', error);
+      throw new Error('Failed to fetch form by id');
     }
 
-    async updateForm(id: number, formData: CreateFormDto) {
+    return data;
 
-        const instancSupabase = this.supabaseService.getSupabaseService();
+  }
 
-        const { data, error } = await instancSupabase.from('tickets').update(formData).eq('id', id).select();
+  async deleteForm(id: number) {
 
-        if (error) {
-            console.error('Error updating form:', error);
-            throw new Error('Failed to update form');
-        }
+    const instancSupabase = this.supabaseService.getSupabaseService();
 
-        return data;
+    const { data, error } = await instancSupabase
+      .from('tickets')
+      .update({ status: false })
+      .eq('id', id)
+      .select();
 
+    if (error) {
+      console.error('Error deleting form:', error);
+      throw new Error('Failed to delete form');
     }
+
+    return data;
+  }
+
+  async updateForm(id: number, formData: CreateFormDto) {
+
+    const instancSupabase = this.supabaseService.getSupabaseService();
+
+    const { data, error } = await instancSupabase.from('tickets').update(formData).eq('id', id).select();
+
+    if (error) {
+      console.error('Error updating form:', error);
+      throw new Error('Failed to update form');
+    }
+
+    return data;
+
+  }
 
 }

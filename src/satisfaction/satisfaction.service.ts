@@ -36,6 +36,7 @@ export class SatisfactionService {
 
         const supabase = this.supabaseService.getSupabaseService();
 
+        //Cadastrar uma nova avaliação
         const { data, error } = await supabase
             .from('avaliacoes')
             .insert([satisfactionData])
@@ -45,6 +46,15 @@ export class SatisfactionService {
         if (error) {
             throw new Error(`Erro ao criar avaliação: ${error.message}`);
         }
+
+        //atualizar o status do ticket para Avaliado Consultor
+
+        const situacaoCurrent = data.nota_atendimento  <= 6 ? 2 : 1;
+
+        await supabase
+            .from('tickets')
+            .update({ situacao: situacaoCurrent })
+            .eq('id', data.ticket_id);
 
         return data;
 

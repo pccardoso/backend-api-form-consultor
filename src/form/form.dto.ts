@@ -81,4 +81,14 @@ export class CreateFormDto {
     @ApiProperty({ description: 'Código da cooperativa no SGA' })   
     @IsNumber()
     codigo_cooperativa: number; 
+
+    @ApiProperty({ 
+        description: 'Situação do formulário: 0 Em tratativa, 1 - Finalizado, 2 - Avalido Consultor, 3 - Avaliado Líder',
+        example: 1,
+        minimum: 0,
+        maximum: 5
+    })
+    @IsOptional()
+    @IsNumber()
+    situacao?: number;
 }

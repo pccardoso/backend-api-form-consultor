@@ -8,6 +8,9 @@ import { UsersModule } from './user/user.module';
 import { SatisfactionModule } from './satisfaction/satisfaction.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
+import { CauseCategoryModule } from './cause_category/cause_category.module';
+import { CauseModule } from './cause/cause.module';
+import { CauseAnalysisModule } from './cause_analysis/cause_analysis.module';
 
 @Module({
   imports: [
@@ -32,7 +35,10 @@ import { EmailModule } from './email/email.module';
     AuthModule,
     UsersModule,
     SatisfactionModule,
-    EmailModule
+    EmailModule,
+    CauseCategoryModule,
+    CauseModule,
+    CauseAnalysisModule
   ],
   controllers: [AppController],
   providers: [AppService],
