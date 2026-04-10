@@ -40,8 +40,16 @@ export class EmailService {
                 >
               </td>
 
-              <td align="right" style="font-size:12px;opacity:0.8">
-                SOLICITAÇÃO #${codigo}
+              <td align="right">
+                <span style="
+                  background:rgba(255,255,255,0.15);
+                  padding:6px 10px;
+                  border-radius:6px;
+                  font-size:12px;
+                  font-weight:bold;
+                ">
+                  SOLICITAÇÃO #${codigo}
+                </span>
               </td>
 
             </tr>
@@ -119,6 +127,20 @@ export class EmailService {
               ">
               Avaliar Atendimento
             </a>
+          </div>
+
+          <!-- AVISO 72H -->
+          <div style="
+            margin-top:10px;
+            background:#fff4e5;
+            border:1px solid #facc15;
+            color:#92400e;
+            padding:10px 15px;
+            border-radius:6px;
+            font-size:13px;
+            display:inline-block;
+          ">
+            ⏳ Este link estará disponível por apenas <strong>72 horas corridas</strong>.
           </div>
 
           <p style="font-size:13px;color:#888">
