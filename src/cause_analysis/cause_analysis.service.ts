@@ -38,10 +38,10 @@ export class CauseAnalysisService {
             throw new Error(`Erro ao criar pivot análise de causa: ${pivotError.message}`);
         }
 
-        //atualizar o status do ticket para analisado pelo líder
+        //atualizar o status do ticket para finalizado
         await supabase
             .from('tickets')
-            .update({ situacao: 3 })
+            .update({ situacao: 1 })
             .eq('id', dataDto.ticket_id);
 
 

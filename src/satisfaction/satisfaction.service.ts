@@ -48,7 +48,6 @@ export class SatisfactionService {
         }
 
         //atualizar o status do ticket para Avaliado Consultor
-
         const situacaoCurrent = data.nota_atendimento  <= 6 ? 2 : 1;
 
         await supabase

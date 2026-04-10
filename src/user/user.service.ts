@@ -39,7 +39,7 @@ export class UsersService {
     return data;
   }
 
-  async createUser(userData: { name: string; email: string; password: string; department: string, admin: boolean }) {
+  async createUser(userData: { name: string; email: string; password: string; department: string, admin: boolean, lider: boolean }) {
 
     const supabase = this.supabaseService.getSupabaseService();
 

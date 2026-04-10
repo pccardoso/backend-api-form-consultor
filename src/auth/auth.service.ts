@@ -30,7 +30,8 @@ export class AuthService {
       email: user.email,
       department: user.department,
       name: user.name,
-      admin: user.admin
+      admin: user.admin,
+      lider: user.lider
     };
 
     return {
@@ -40,7 +41,7 @@ export class AuthService {
 
   }
 
-  async register(name: string, email: string, password: string, department: string, admin: boolean) {
+  async register(name: string, email: string, password: string, department: string, admin: boolean, lider: boolean) {
 
     const existingUser = await this.usersService.findByEmail(email);
 
@@ -55,7 +56,8 @@ export class AuthService {
       email,
       password: hashedPassword,
       department,
-      admin
+      admin,
+      lider
     });
 
     const payload = {
