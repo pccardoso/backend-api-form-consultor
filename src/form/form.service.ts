@@ -61,8 +61,10 @@ export class FormService {
       {
         codigo: data[0].id,
         nome: formData.nome_associado_sga,
-        consultor: formData.nome_cooperativa_consultor,
-        placa: formData.plate_associate
+        consultor: formData.consultor_associado_sga,
+        placa: formData.plate_associate,
+        descricao: formData.description_associate,
+        modelo: formData.modelo_associado_sga
       }
     );
 

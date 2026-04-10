@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CauseCategoryDto {
     
@@ -10,5 +10,10 @@ export class CauseCategoryDto {
     @ApiProperty({ description: 'Nome da categoria da causa' })
     @IsString()
     nome: string;
+
+    @ApiProperty({ description: 'Status da Categoria' })
+    @IsBoolean()
+    @IsOptional()
+    status?: boolean;
 
 }

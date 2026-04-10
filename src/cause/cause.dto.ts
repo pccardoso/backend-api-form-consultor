@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CauseDto {
 
@@ -23,5 +23,10 @@ export class CauseDto {
     @ApiProperty({ description: 'Nível de risco da causa: 0 Baixo, 1 Médio, 2 Alto' })
     @IsNumber()
     risco: number;
+
+    @ApiProperty({ description: 'Status da causa' })
+    @IsBoolean()
+    @IsOptional()
+    status?: boolean;
 
 }

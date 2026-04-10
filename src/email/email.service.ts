@@ -13,6 +13,8 @@ export class EmailService {
     const consultor = dataInfor.consultor;
     const placa = dataInfor.placa;
     const linkAvaliacao = `https://autoanalytics.mundoevogard.com/satisfaction/${codigo}`;
+    const descricao = dataInfor.descricao || "Sem descrição";
+    const modelo = dataInfor.modelo || "Modelo não informado";
 
     await this.mailerService.sendMail({
       to: send,
@@ -46,15 +48,15 @@ export class EmailService {
           </table>
 
           <div style="margin-top:15px;font-size:20px;font-weight:bold">
-            ${nome}
+            ${nome} (${placa})
           </div>
 
           <div style="font-size:14px;margin-top:5px">
             Consultor: ${consultor}
           </div>
 
-          <div style="font-size:14px;margin-top:3px">
-            Veículo: ${placa}
+          <div style="font-size:14px;margin-top:5px">
+            Modelo Veículo: ${modelo}
           </div>
 
         </td>
@@ -67,6 +69,35 @@ export class EmailService {
           <h2 style="color:#0c2d48;margin-top:0">
             Pesquisa de Satisfação
           </h2>
+
+          <!-- DESCRIÇÃO -->
+            <div style="
+              margin:25px 0;
+              text-align:left;
+              background:#f9fafb;
+              border:1px solid #e5e7eb;
+              border-radius:8px;
+              padding:15px 20px;
+            ">
+              <div style="
+                font-size:13px;
+                color:#888;
+                margin-bottom:5px;
+                font-weight:bold;
+                text-transform:uppercase;
+              ">
+                Descrição da Solicitação
+              </div>
+
+              <div style="
+                font-size:14px;
+                color:#333;
+                line-height:1.6;
+                word-break:break-word;
+              ">
+                ${descricao}
+              </div>
+            </div>
 
           <p style="color:#555;font-size:15px;line-height:1.5">
             Sua opinião é muito importante para nós.
