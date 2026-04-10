@@ -87,4 +87,22 @@ export class UsersService {
     return { message: 'User deleted successfully' };
   }
 
+  async updateUser(id: number, userData: { name?: string; email?: string; password?: string; department?: string, admin?: boolean, lider?: boolean }) {
+
+    const supabase = this.supabaseService.getSupabaseService();
+
+    const { data, error } = await supabase
+      .from('users')
+      .update(userData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(`Supabase error: ${error.message}`);
+    }
+
+    return data;
+  }
+
 }

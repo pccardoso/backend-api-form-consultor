@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, UseGuards, Param } from '@nestjs/common';
+import { Controller, Delete, Get, UseGuards, Param, Put, Body } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation } from '@nestjs/swagger';
@@ -20,5 +20,12 @@ export class UserController {
     async delete(@Param('id') id: number) {
         return await this.usersService.deleteUser(id);
     }
+
+    @ApiOperation({ summary: 'Atualizar usuário', description: 'Atualiza as informações de um usuário específico com base no ID' })
+    @Put(':id')
+    async update(@Param('id') id: number, @Body() userData: any) {
+        return await this.usersService.updateUser(id, userData);
+    }
+
 
 }
