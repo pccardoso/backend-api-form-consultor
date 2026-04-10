@@ -45,6 +45,8 @@ export class PipefyService {
 
         const response = await this.getCards(idPipe);
 
+        return response;
+
         const filteredCards = response.filter((card) => {
             const plateField = card.node.fields.find((field) => field.name === 'Placa do Veículo');
             return plateField && plateField.value === plate;

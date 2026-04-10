@@ -57,4 +57,24 @@ export class CauseService {
         return data;
     }
 
+    async updateCause(id: number, causeDto: CauseDto) {
+
+        const supabase = this.supabaseService.getSupabaseService();
+
+        const { data, error } = await supabase
+            .from('causas')
+            .update(causeDto)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) {
+            throw new Error(`Erro ao atualizar causa: ${error.message}`);
+        }
+
+        return data;
+    }
+
+
+
 }

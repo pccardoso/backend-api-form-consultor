@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Param } from '@nestjs/common';
 import { CauseService } from './cause.service';
 import { CauseDto } from './cause.dto';
 
@@ -20,5 +20,14 @@ export class CauseController {
   async getAllCausesWithCategories() {
     return await this.causeService.getAllCausesWithCategories();
   }
+
+  @Put(':id')
+  async updateCause(
+    @Body() causeDto: CauseDto,
+    @Param('id') id: number,
+  ) {
+    return await this.causeService.updateCause(id, causeDto);
+  }
+
 
 }

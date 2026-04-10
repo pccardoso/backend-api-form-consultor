@@ -42,4 +42,22 @@ export class CauseCategoryService {
         return data;
     }
 
+    async updateCauseCategory(id: number, dataDto: CauseCategoryDto) {
+
+        const supabase = this.supabaseService.getSupabaseService();
+
+        const { data, error } = await supabase
+            .from('causa_categorias')
+            .update(dataDto)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) {
+            throw new Error(`Erro ao atualizar categoria de causa: ${error.message}`);
+        }
+
+        return data;
+    }
+
 }
