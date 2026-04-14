@@ -28,6 +28,19 @@ export class PipefyService {
                                         name
                                         value
                                     }
+                                    child_relations{
+                                        cards {
+                                            id
+                                            fields{
+                                            name
+                                            array_value
+                                            label_values {
+                                                id
+                                            }
+                                            value
+                                            }
+                                        }
+                                    } 
                                 }
                             }
                         }
@@ -44,8 +57,6 @@ export class PipefyService {
     async searchCardsByPlate(idPipe: number, plate: string) {
 
         const response = await this.getCards(idPipe);
-
-        return response;
 
         const filteredCards = response.filter((card) => {
             const plateField = card.node.fields.find((field) => field.name === 'Placa do Veículo');

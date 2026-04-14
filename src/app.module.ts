@@ -12,6 +12,7 @@ import { CauseCategoryModule } from './cause_category/cause_category.module';
 import { CauseModule } from './cause/cause.module';
 import { CauseAnalysisModule } from './cause_analysis/cause_analysis.module';
 import { PipefyModule } from './pipefy/pipefy.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { PipefyModule } from './pipefy/pipefy.module';
     CauseCategoryModule,
     CauseModule,
     CauseAnalysisModule,
-    PipefyModule
+    PipefyModule,
+    ReportModule
   ],
   controllers: [AppController],
   providers: [AppService],

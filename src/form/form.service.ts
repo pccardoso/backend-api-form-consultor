@@ -11,27 +11,42 @@ export class FormService {
     private emailService: EmailService
   ) { }
 
-  async getAll(department?: string): Promise<any[]> {
+  async getAll(
+    department?: string,
+    startDate?: string,
+    endDate?: string
+  ): Promise<any[]> {
 
     const supabase = this.supabaseService.getSupabaseService();
 
     let query = supabase
       .from('tickets')
       .select(`
-    *,
-    avaliacoes(*),
-    analises(
       *,
-      analise_causas(
-        causa_id,
-        causas(*)
+      avaliacoes(*),
+      analises(
+        *,
+        analise_causas(
+          causa_id,
+          causas(*)
+        )
       )
-    )
-  `)
+    `)
       .eq('status', true);
 
+    // filtro por departamento
     if (department) {
       query = query.eq('department', department);
+    }
+
+    // filtro por data inicial
+    if (startDate) {
+      query = query.gte('created_at', startDate);
+    }
+
+    // filtro por data final
+    if (endDate) {
+      query = query.lte('created_at', endDate);
     }
 
     const { data, error } = await query;

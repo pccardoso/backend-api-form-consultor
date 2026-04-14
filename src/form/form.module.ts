@@ -7,6 +7,7 @@ import { EmailModule } from 'src/email/email.module';
 @Module({
   imports: [EmailModule],
   controllers: [FormController],
-  providers: [FormService, SupabaseService]
+  providers: [FormService, SupabaseService],
+  exports: [FormService]
 })
 export class FormModule {}

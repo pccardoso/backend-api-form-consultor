@@ -1,4 +1,4 @@
-import { Controller, Get,Post, Body, Param, Delete, Put, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get,Post, Body, Param, Delete, Put, UseGuards, Req, Query } from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto } from './form.dto';
 import { ApiOperation, ApiParam } from '@nestjs/swagger';
@@ -8,14 +8,25 @@ import { AuthGuard } from '@nestjs/passport';
 export class FormController {
   constructor(private readonly formService: FormService) {}
 
-  @ApiOperation({ summary: 'Listar formulários', description: 'Retorna uma lista de todos os formulários' })
+  @ApiOperation({
+    summary: 'Listar formulários',
+    description: 'Retorna uma lista de formulários com filtros opcionais'
+  })
   @UseGuards(AuthGuard('jwt'))
   @Get('')
-  async getAll(@Req() req: any) {
+  async getAll(
+    @Req() req: any,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
 
     const dep = req.user.department || null;
 
-    return await this.formService.getAll(dep);
+    return await this.formService.getAll(
+      dep,
+      startDate,
+      endDate
+    );
   }
 
   @ApiOperation({ summary: 'Criar formulário', description: 'Cria um novo formulário' })
