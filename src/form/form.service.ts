@@ -41,12 +41,12 @@ export class FormService {
 
     // filtro por data inicial
     if (startDate) {
-      query = query.gte('created_at', startDate);
+      query = query.gte('created_at', `${startDate}T00:00:00.000`);
     }
 
     // filtro por data final
     if (endDate) {
-      query = query.lte('created_at', endDate);
+      query = query.lte('created_at', `${endDate}T23:59:59.999`);
     }
 
     const { data, error } = await query;
