@@ -11,8 +11,9 @@ import { EmailModule } from './email/email.module';
 import { CauseCategoryModule } from './cause_category/cause_category.module';
 import { CauseModule } from './cause/cause.module';
 import { CauseAnalysisModule } from './cause_analysis/cause_analysis.module';
-import { PipefyModule } from './pipefy/pipefy.module';
 import { ReportModule } from './report/report.module';
+import { PipefyService } from './pipefy/pipefy.service';
+import { PipefyModule } from './pipefy/pipefy.module';
 
 @Module({
   imports: [
@@ -41,10 +42,10 @@ import { ReportModule } from './report/report.module';
     CauseCategoryModule,
     CauseModule,
     CauseAnalysisModule,
-    PipefyModule,
-    ReportModule
+    ReportModule,
+    PipefyModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PipefyService],
 })
 export class AppModule {}

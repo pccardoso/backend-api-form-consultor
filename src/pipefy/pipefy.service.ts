@@ -1,69 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import { CreateFormDto } from 'src/form/form.dto';
 
 @Injectable()
 export class PipefyService {
 
-    async getCards(idPipe: number) {
+    async createCard(createFormDto: CreateFormDto) {
+        
+        try{
 
-        const response = await fetch('https://api.pipefy.com/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.TOKEN_PIPEFY}`,
-            },
-            body: JSON.stringify({
-                query: `
-                    query {
-                        allCards(pipeId: ${idPipe}) {
-                            edges {
-                                node {
-                                    id
-                                    title
-                                    createdAt
-                                    current_phase {
-                                        id
-                                        name
-                                    }
-                                    fields {
-                                        name
-                                        value
-                                    }
-                                    child_relations{
-                                        cards {
-                                            id
-                                            fields{
-                                            name
-                                            array_value
-                                            label_values {
-                                                id
-                                            }
-                                            value
-                                            }
-                                        }
-                                    } 
-                                }
-                            }
-                        }
-                    }
-                `,
-            }),
-        });
+           const response = await fetch('https://integration-pipefy.mundoevogard.com/pipefy/create-card', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    idPipe: 307108442,
+                    title: createFormDto.nome_associado_sga,
+                    fields: [
+                        { field_id: 'teste', field_value: createFormDto.consultor_associado_sga },
+                    ],
+                }),
+            });
 
-        const data = await response.json();
-        return data.data?.allCards?.edges || [];
+            console.log('Response from Pipefy:', response.status, await response.text());
 
-    }
-
-    async searchCardsByPlate(idPipe: number, plate: string) {
-
-        const response = await this.getCards(idPipe);
-
-        const filteredCards = response.filter((card) => {
-            const plateField = card.node.fields.find((field) => field.name === 'Placa do Veículo');
-            return plateField && plateField.value === plate;
-        });
-
-        return filteredCards;
+        }catch(error){
+                console.error('Error creating card in Pipefy:', error);
+        }
 
     }
 

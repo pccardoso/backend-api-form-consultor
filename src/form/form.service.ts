@@ -2,13 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { SupabaseService } from 'src/supabase/supabase.service';
 import { CreateFormDto } from './form.dto';
 import { EmailService } from 'src/email/email.service';
+import { PipefyService } from 'src/pipefy/pipefy.service';
 
 @Injectable()
 export class FormService {
 
   constructor(
     private supabaseService: SupabaseService,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private pipefyService: PipefyService
+
   ) { }
 
   async getAll(
@@ -70,18 +73,21 @@ export class FormService {
       throw new Error('Failed to create form');
     }
 
-    await this.emailService.sendEmail(
-      formData.email_voluntario_sga,
-      'Formulário Recebido',
-      {
-        codigo: data[0].id,
-        nome: formData.nome_associado_sga,
-        consultor: formData.consultor_associado_sga,
-        placa: formData.plate_associate,
-        descricao: formData.description_associate,
-        modelo: formData.modelo_associado_sga
-      }
-    );
+    await Promise.all([
+      this.pipefyService.createCard(formData),
+      this.emailService.sendEmail(
+        formData.email_voluntario_sga,
+        'Formulário Recebido',
+        {
+          codigo: data[0].id,
+          nome: formData.nome_associado_sga,
+          consultor: formData.consultor_associado_sga,
+          placa: formData.plate_associate,
+          descricao: formData.description_associate,
+          modelo: formData.modelo_associado_sga
+        }
+      )
+    ]);
 
     return data;
 
