@@ -14,6 +14,9 @@ import { CauseAnalysisModule } from './cause_analysis/cause_analysis.module';
 import { ReportModule } from './report/report.module';
 import { PipefyService } from './pipefy/pipefy.service';
 import { PipefyModule } from './pipefy/pipefy.module';
+import { ScriptConfigsModule } from './script_configs/script_configs.module';
+import { ScriptConfigVariablesModule } from './script_config_variables/script_config_variables.module';
+import { ScriptConfigPhasesModule } from './script_config_phases/script_config_phases.module';
 
 @Module({
   imports: [
@@ -43,7 +46,10 @@ import { PipefyModule } from './pipefy/pipefy.module';
     CauseModule,
     CauseAnalysisModule,
     ReportModule,
-    PipefyModule
+    PipefyModule,
+    ScriptConfigsModule,
+    ScriptConfigVariablesModule,
+    ScriptConfigPhasesModule
   ],
   controllers: [AppController],
   providers: [AppService, PipefyService],
