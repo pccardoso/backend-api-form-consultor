@@ -3,7 +3,7 @@ import { CreateFormDto } from 'src/form/form.dto';
 import { SearchCardDto } from './dto/search.card.dto';
 import { Logger } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common';
-import { pipe_relation } from 'src/config/app';
+import { pipe_relation, ErrorCode } from 'src/config/app';
 import { ScriptConfigsService } from 'src/script_configs/script_configs.service';
 import { parseScript } from 'src/helpers/parseScript';
 
@@ -90,7 +90,7 @@ export class PipefyService {
           id: card.node.id,
           title: card.node.title,
           current_phase: card.node.current_phase.name,
-          model: card.node.fields.find(field => field.name === 'Veículo')?.value || null,
+          model: card.node.fields.find(field => field.name === 'Marca / Modelo do Veículo')?.value || null,
           date: card.node.fields.find(field => field.name === 'Data e Hora do Ocorrido')?.value || null,
           type: card.node.fields.find(field => field.name === 'Tipo Sinistro')?.value || null,
         }));
@@ -106,7 +106,6 @@ return texto +
 
 const textoFinal = 
 `⚠️ ACIONAMENTOS
-
 ▪️ Encontramos os seguintes acionamentos para a placa informada.
 ▪️ Para continuar, digita o código que deseja acionamento:
 ${textResult}
@@ -129,22 +128,14 @@ ${textResult}
 
     for(const {idPipe, pipeCurrent, nextConnection} of pipe_relation){
 
-      console.log(nextCard);
-
       const response = await fetch(`https://integration-pipefy.mundoevogard.com/pipefy/card/${nextCard}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-      })
+      });
 
       const dataCard = await response.json();
-
-      const idConnection = dataCard?.child_relations[nextConnection]?.cards[0]?.id;
-
-      if(!idConnection) return;
-
-      nextCard = idConnection;
 
       statusConnection.push({
         idPipe,
@@ -153,9 +144,14 @@ ${textResult}
         dataCard
       });
 
+      const idConnection = dataCard?.child_relations[nextConnection]?.cards[0]?.id;
+
+      if (!idConnection) break;
+
+      nextCard = idConnection;
+
       console.log(`Encontramos uma conexão válida, pipe atual ${pipeCurrent}`);
       
-
     }
 
     return statusConnection;
@@ -164,6 +160,8 @@ ${textResult}
 
   async generateStatusCard(idCard:number){
 
+    const logger = new Logger('PipefyLogger: ');
+  
     const listCard = await this.getTriggerPhase(idCard);
 
     if(listCard?.length === 0) {
@@ -174,6 +172,8 @@ ${textResult}
 
     const phaseCurrent = listCard?.[listCard.length - 1];
 
+    console.log(phaseCurrent);
+
     const fieldCurrentPhase = phaseCurrent.dataCard.fields;
 
     const listConfigScript = await this.scriptConfigsService.getAllScriptConfigs();
@@ -181,24 +181,40 @@ ${textResult}
     const configScript = listConfigScript.find(config => config.pipe_id === phaseCurrent.idPipe);
 
     if(!configScript) {
-      return {
-        text: "Nenhuma configuração de script encontrada para esse card."
-      }
+
+      throw new NotFoundException({
+        "message": "Nenhuma configuração de script encontrada para o departamento.",
+        "code": ErrorCode.SCRIPT_CONFIG_NOT_FOUND,
+        "data": phaseCurrent
+      });
+
     }
 
     const phaseConfig = configScript.script_config_phases.find(phase => phase.phase_name === phaseCurrent.dataCard.current_phase.name);
 
     if(!phaseConfig) {
-      return {
-        text: "Nenhuma fase configurada encontrada para esse card."
-      }
+      
+      throw new NotFoundException({
+        "message": "Nenhuma configuração de script encontrada para a fase atual do card.",
+        "code": ErrorCode.SCRIPT_CONFIG_NOT_FOUND,
+        "data": phaseCurrent
+      });
+
     }
 
     const scriptParsed = parseScript(fieldCurrentPhase, phaseConfig.script);
 
-    return {
-      text: scriptParsed || "Nenhum script encontrado para essa fase."
-    };
+    if(!scriptParsed) {
+
+        throw new NotFoundException({
+          "message": "Nenhum script encontrado para essa fase.",
+          "code": ErrorCode.SCRIPT_CONFIG_NOT_FOUND,
+          "data": phaseCurrent
+        });
+
+    }
+
+    return scriptParsed;
 
   }
 

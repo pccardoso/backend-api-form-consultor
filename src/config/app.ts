@@ -20,3 +20,7 @@ export const pipe_relation = [
     nextConnection: 0
   }
 ];
+
+export enum ErrorCode {
+  SCRIPT_CONFIG_NOT_FOUND = 'SCRIPT_CONFIG_NOT_FOUND',
+}
