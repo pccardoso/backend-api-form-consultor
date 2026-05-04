@@ -165,9 +165,7 @@ ${textResult}
     const listCard = await this.getTriggerPhase(idCard);
 
     if(listCard?.length === 0) {
-      return {
-        text: "Nenhuma conexão encontrada para esse card."
-      }
+      return "Nenhuma conexão encontrada para esse card.";
     }
 
     const phaseCurrent = listCard?.[listCard.length - 1];
